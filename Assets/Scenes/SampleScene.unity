@@ -197,6 +197,8 @@ MonoBehaviour:
   attackSpeed: 0.8
   attackTimer: 0
   timer: 0
+  team: 0
+  range: 10
   coord: {x: 0, y: 0}
   attackPrefab: {fileID: 525483381}
 --- !u!1 &420221445
@@ -345,13 +347,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
-  maxHP: 150
+  maxHP: 1500
   healthPoint: 150
   attackPoint: 5
   defendPoint: 10
   attackSpeed: 0.7
   attackTimer: 0
   timer: 0
+  team: 0
+  range: 1
   coord: {x: 0, y: 0}
   movementSpeed: 1
 --- !u!1 &705507993
@@ -889,6 +893,8 @@ MonoBehaviour:
   attackSpeed: 0.8
   attackTimer: 0
   timer: 0
+  team: 0
+  range: 5
   coord: {x: 0, y: 0}
   attackPrefab: {fileID: 1312935241}
 --- !u!1001 &1390608021
@@ -977,6 +983,8 @@ MonoBehaviour:
   attackSpeed: 0.5
   attackTimer: 0
   timer: 0
+  team: 0
+  range: 1
   coord: {x: 0, y: 0}
   movementSpeed: 2
 --- !u!224 &1700301225 stripped
