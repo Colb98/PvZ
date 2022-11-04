@@ -15,6 +15,9 @@ public class Creature : MonoBehaviour
     public float attackTimer;
     public float timer;
 
+    public int team;
+    public float range;
+
     public Vector2 coord;
 
 
@@ -32,7 +35,7 @@ public class Creature : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
         timer += Time.deltaTime;
 
@@ -49,16 +52,23 @@ public class Creature : MonoBehaviour
         {
             attackTimer = attackSpeed;
         }
+
+        coord.x = transform.position.x + 0.5f;
     }
 
     public virtual bool CanAttack()
     {
-        return true;
+        return false;
     }
 
     public virtual void Attack()
     {
         //Debug.Log("Attack by object " + this.GetType().Name + " id: " + this.id);
+    }
+
+    public virtual float GetRangeDir()
+    {
+        return range;
     }
 
     public void ReceiveHealing(float healPoint)

@@ -72,6 +72,29 @@ public class CreatureManager : MonoBehaviour
         Debug.Log("Add creature type " + creature.GetType());
     }
 
+    public bool HasOppositeCreatureInRowInRange(int team, int row, float coordX, float rangeDir)
+    {
+        foreach (Creature creature in creatures)
+        {
+            if (creature.team == team) continue;
+
+            bool isInRange = false;
+            if (rangeDir < 0)
+            {
+                isInRange = coordX + rangeDir <= creature.coord.x;
+            }
+            else
+            {
+                isInRange = coordX + rangeDir >= creature.coord.x;
+            }
+            if (creature.coord.y == row && isInRange)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     internal static Plant AddPlantToTile(int plantIndex, Tile tile)
     {
         Plant ret = GetInstance().GetPlantByIndex(plantIndex);

@@ -76,6 +76,8 @@ public class StageZombieManager : MonoBehaviour
         return curTime >= value && curTime - dt < value;
     }
 
+    // TODO: Get zombie by distance (to check for range)
+
     public int GetZombieCountInRow(int row)
     {
         if (!zombieByRows.ContainsKey(row)) return 0;

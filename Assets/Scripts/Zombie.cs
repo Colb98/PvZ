@@ -10,29 +10,45 @@ public class Zombie : Creature
     protected new void Start()
     {
         base.Start();
+        team = 1;
     }
 
     // Update is called once per frame
-    void Update()
+    protected new void Update()
     {
+        base.Update();
         if (transform.position.x < -0.5)
         {
             gameObject.SetActive(false);
             return;
         }
         float dt = Time.deltaTime;
-        transform.Translate(new Vector3(-GetMovementSpeed() * dt, 0, 0), Space.World);
+        if (!CanAttack())
+        {
+            transform.Translate(new Vector3(-GetMovementSpeed() * dt, 0, 0), Space.World);
+        }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public override void Attack()
     {
-        Debug.Log("On collision");
+        Debug.Log("Zombie id " + id + " attack bam bam");
     }
 
+    public override bool CanAttack()
+    {
+        if (CreatureManager.GetInstance() == null) return false;
+
+        return CreatureManager.GetInstance().HasOppositeCreatureInRowInRange(team, (int)coord.y, coord.x, GetRangeDir());
+    }
     protected override void OnDeath()
     {
         base.OnDeath();
         StageZombieManager.GetInstance().OnZombieDeath(this);
+    }
+
+    public override float GetRangeDir()
+    {
+        return -range;
     }
 
     public float GetMovementSpeed()
