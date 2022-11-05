@@ -66,6 +66,11 @@ public class Creature : MonoBehaviour
         //Debug.Log("Attack by object " + this.GetType().Name + " id: " + this.id);
     }
 
+    public virtual Attack GetAttackPrefab()
+    {
+        return null;
+    }
+
     public virtual float GetRangeDir()
     {
         return range;
@@ -98,6 +103,22 @@ public class Creature : MonoBehaviour
         }
     }
     
+    public void ReceiveDamage(float damage, Creature attacker)
+    {
+        float realDamage = damage * GetDamageMultiplier() - GetDamageFlatReduction();
+        if (realDamage < 0)
+        {
+            realDamage = 0.0f;
+        }
+
+        healthPoint -= realDamage;
+        if (healthPoint <= 0)
+        {
+            healthPoint = 0;
+            OnDeath();
+        }
+    }
+
     public float GetDamageMultiplier()
     {
         return 1.0f;

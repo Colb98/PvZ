@@ -25,6 +25,6 @@ public class Plant : Creature
     {
         if (CreatureManager.GetInstance() == null) return false;
 
-        return CreatureManager.GetInstance().HasOppositeCreatureInRowInRange(team, (int)coord.y, coord.x, GetRangeDir());
+        return CreatureManager.GetInstance().GetOppositeCreatureInRowInRange(team, (int)coord.y, coord.x, GetRangeDir()) != null;
     }
 }

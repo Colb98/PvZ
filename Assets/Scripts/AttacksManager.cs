@@ -44,8 +44,18 @@ public class AttacksManager : MonoBehaviour
         return instance;
     }
     
-    public Attack GetAttackOfType(Type type, Attack prefab)
+    public Attack GetAttackOfType(Type type, Creature attacker)
     {
+        Attack prefab = attacker.GetAttackPrefab();
+        // Melee or *instant* attack
+        if (prefab == null)
+        {
+            Creature target = CreatureManager.GetInstance().GetOppositeCreatureInRowInRange(attacker);
+            target.ReceiveDamage(attacker.attackPoint, attacker);
+            Debug.Log("Melee damage " + attacker.attackPoint + " attack target" + target + " hp: " + target.healthPoint);
+            return null;
+        }
+
         if (!pool.ContainsKey(type))
         {
             pool[type] = new List<Attack>();

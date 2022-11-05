@@ -69,14 +69,20 @@ public class CreatureManager : MonoBehaviour
             creaturePool.Add(creature.GetType(), list);
         }
         list.Add(creature);
-        Debug.Log("Add creature type " + creature.GetType());
+        //Debug.Log("Add creature type " + creature.GetType());
     }
 
-    public bool HasOppositeCreatureInRowInRange(int team, int row, float coordX, float rangeDir)
+    public Creature GetOppositeCreatureInRowInRange(Creature attacker)
+    {
+        return GetOppositeCreatureInRowInRange(attacker.team, (int)attacker.coord.y, attacker.coord.x, attacker.GetRangeDir());
+    }
+
+    public Creature GetOppositeCreatureInRowInRange(int team, int row, float coordX, float rangeDir)
     {
         foreach (Creature creature in creatures)
         {
             if (creature.team == team) continue;
+            if (creature.healthPoint <= 0) continue;
 
             bool isInRange = false;
             if (rangeDir < 0)
@@ -89,10 +95,10 @@ public class CreatureManager : MonoBehaviour
             }
             if (creature.coord.y == row && isInRange)
             {
-                return true;
+                return creature;
             }
         }
-        return false;
+        return null;
     }
 
     internal static Plant AddPlantToTile(int plantIndex, Tile tile)

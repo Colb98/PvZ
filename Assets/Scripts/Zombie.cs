@@ -31,14 +31,14 @@ public class Zombie : Creature
 
     public override void Attack()
     {
-        Debug.Log("Zombie id " + id + " attack bam bam");
+        AttacksManager.GetInstance().GetAttackOfType(null, this);
     }
 
     public override bool CanAttack()
     {
         if (CreatureManager.GetInstance() == null) return false;
 
-        return CreatureManager.GetInstance().HasOppositeCreatureInRowInRange(team, (int)coord.y, coord.x, GetRangeDir());
+        return CreatureManager.GetInstance().GetOppositeCreatureInRowInRange(this) != null;
     }
     protected override void OnDeath()
     {
