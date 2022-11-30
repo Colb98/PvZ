@@ -13,11 +13,16 @@ public class Timeline : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        foreach (Zombie zombie in prefabs)
+        {
+            zombie.gameObject.SetActive(false);
+        }
+
         timeLineRecords = new List<TimelineRecord>();
         waves = new List<TimelineRecordWave>();
 
         TimelineRecordWave testWave = new TimelineRecordWave();
-        testWave.time = 2;
+        testWave.time = 0.1f;
         testWave.rate = new List<float>{ 0.3f, 0.7f };
         testWave.zombiePrefabIds = new List<int> { 0, 1 };
         testWave.zombieNumber = 10;

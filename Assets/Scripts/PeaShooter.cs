@@ -24,7 +24,7 @@ public class PeaShooter : Plant
         Attack projectile = AttacksManager.GetInstance().GetAttackOfType(attackPrefab.GetType(), this);
         projectile.transform.position = position;
         projectile.transform.SetParent(transform.parent);
-        projectile.damage = attackPoint;
+        projectile.damage = GetAttackPoint();
         projectile.speed = 3;
         projectile.type = AttackType.Range;
     }

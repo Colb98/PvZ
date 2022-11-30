@@ -19,16 +19,20 @@ public abstract class Attack : MonoBehaviour
 
     public List<Creature> affectedTargets;
 
+    public Vector2 coord;
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        OnCreate();
+        //OnCreate();
     }
 
     public void OnCreate()
     {
         AttacksManager.GetInstance().OnAttackCreated(this);
         Reset();
+        coord.x = creator.coord.x;
+        coord.y = creator.coord.y;
     }
 
     public void Reset()
@@ -52,16 +56,49 @@ public abstract class Attack : MonoBehaviour
             Vector3 location = transform.position;
             location.x += speed * Time.deltaTime;
             transform.position = location;
+
+            coord.x = transform.position.x + 0.5f;
+
+            Creature creature = CreatureManager.GetInstance().GetOppositeCreatureInRowWithHitBox(creator.team, (int)coord.y, coord.x, 0.2f);
+            if (creature != null)
+            {
+                OnCollideOtherTeamCreature(creature);
+            }
         }
     }
 
-    // Base for projectile
+    //Deprecated
+    private void OnCollisionStay(Collision collision)
+    {
+        if (dealtDamage) return;
+
+        Creature creature = collision.gameObject.GetComponent<Creature>();
+        //creature.ReceiveDamage(damage);
+        affectedTargets.Add(creature);
+        DoDamage();
+        dealtDamage = true;
+
+        AttacksManager.GetInstance().OnAttackEOL(this);
+    }
+
+    // (Deprecated) Base for projectile
     private void OnCollisionEnter(Collision collision)
     {
         if (dealtDamage) return;
 
         Creature creature = collision.gameObject.GetComponent<Creature>();
         //creature.ReceiveDamage(damage);
+        affectedTargets.Add(creature);
+        DoDamage();
+        dealtDamage = true;
+
+        AttacksManager.GetInstance().OnAttackEOL(this);
+    }
+
+    private void OnCollideOtherTeamCreature(Creature creature)
+    {
+        if (dealtDamage) return;
+
         affectedTargets.Add(creature);
         DoDamage();
         dealtDamage = true;

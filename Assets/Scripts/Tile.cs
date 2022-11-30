@@ -34,20 +34,20 @@ public class Tile : MonoBehaviour
         GetComponent<MeshRenderer>().material = bloom;
     }
 
-    public void Plant(int plantIndex)
+    public void Plant(Plant plant)
     {
-        if (!canBePlant)
-        {
-            Debug.Log("Cell can't plant");
-            return;
-        }
+        curPlant = plant;
+    }
 
+    public void RemovePlant()
+    {
         if (curPlant != null)
         {
-            Debug.Log("Plant invalid" + curPlant.id);
-            return;
+            CreatureManager.GetInstance().OnCreatureDead(curPlant);
         }
-
-        curPlant = CreatureManager.AddPlantToTile(plantIndex, this);
+        else
+        {
+            Debug.Log("No plant to remove!");
+        }
     }
 }

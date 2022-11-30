@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Plant : Creature
 {
+    public int cost = 20;
+
     // Start is called before the first frame update
-    private new void Start()
+    protected override void Start()
     {
         base.Start();
         team = 0; // Plant default team zero
@@ -25,6 +27,7 @@ public class Plant : Creature
     {
         if (CreatureManager.GetInstance() == null) return false;
 
-        return CreatureManager.GetInstance().GetOppositeCreatureInRowInRange(team, (int)coord.y, coord.x, GetRangeDir()) != null;
+        Creature target = CreatureManager.GetInstance().GetOppositeCreatureInRowInRange(team, (int)coord.y, coord.x, GetRangeDir());
+        return target != null;
     }
 }

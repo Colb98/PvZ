@@ -16,7 +16,6 @@ public class Zombie : Creature
     // Update is called once per frame
     protected new void Update()
     {
-        base.Update();
         if (transform.position.x < -0.5)
         {
             gameObject.SetActive(false);
@@ -27,6 +26,7 @@ public class Zombie : Creature
         {
             transform.Translate(new Vector3(-GetMovementSpeed() * dt, 0, 0), Space.World);
         }
+        base.Update();
     }
 
     public override void Attack()

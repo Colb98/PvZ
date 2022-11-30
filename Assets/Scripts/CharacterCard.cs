@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class CharacterCard : MonoBehaviour
     , IPointerDownHandler
@@ -19,14 +20,13 @@ public class CharacterCard : MonoBehaviour
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log("Plant the tree");
         mapGenerator.SetAllTileNormal();
         isHovering = false;
 
         if (curTile != null)
         {
             curTile.SetNormal();
-            curTile.Plant(plantType);
+            SunManager.getInstance().PlantAtTile(plantType, curTile);
         }
         curTile = null;
     }
@@ -35,31 +35,13 @@ public class CharacterCard : MonoBehaviour
     void Start()
     {
         isHovering = false;
+        GetComponent<Image>().sprite = CreatureManager.GetInstance().plantPrefabs[plantType].GetAvatar(); ;
     }
     
     
     // Update is called once per frame
     void Update()
     {
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    isHovering = true;
-        //}
-
-        //if (Input.GetMouseButtonUp(0) && isHovering)
-        //{
-        //    Debug.Log("Plant the tree");
-        //    mapGenerator.SetAllTileNormal();
-        //    isHovering = false;
-
-        //    if (curTile != null)
-        //    {
-        //        curTile.SetNormal();
-        //        curTile.Plant(plantType);
-        //    }
-        //    curTile = null;
-        //}
-
         if (isHovering)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

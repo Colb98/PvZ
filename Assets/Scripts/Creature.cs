@@ -4,22 +4,23 @@ using UnityEngine;
 
 public class Creature : MonoBehaviour
 {
-    public int id;
-    public float maxHP;
-    public float healthPoint;
-    public float attackPoint;
-    public float defendPoint;
-    public float attackSpeed;
+    [SerializeField] protected int id;
+    [SerializeField] protected float maxHP;
+    [SerializeField] protected float healthPoint;
+    [SerializeField] protected float attackPoint;
+    [SerializeField] protected float defendPoint;
+    [SerializeField] protected float attackSpeed;
+    [SerializeField] protected Sprite avatar;
 
-
-    public float attackTimer;
-    public float timer;
+    [SerializeField] protected float attackTimer;
+    [SerializeField] protected float timer;
+    [SerializeField] protected bool showDebug = false;
 
     public int team;
     public float range;
 
     public Vector2 coord;
-
+    public bool isAOE = false;
 
     private void Awake()
     {
@@ -27,7 +28,7 @@ public class Creature : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    protected void Start()
+    protected virtual void Start()
     {
 
         id = CreatureManager.GetInstance().OnNewCreature(this);
@@ -35,25 +36,28 @@ public class Creature : MonoBehaviour
     }
 
     // Update is called once per frame
-    protected void Update()
+    protected virtual void Update()
     {
         timer += Time.deltaTime;
 
-        if (CanAttack())
+        bool canAttack = CanAttack();
+        if (canAttack || !IsAttackCooledDown())
         {
             attackTimer += Time.deltaTime;
-            if (attackTimer >= attackSpeed)
+
+            if (canAttack && IsAttackCooledDown())
             {
                 attackTimer -= attackSpeed;
                 Attack();
             }
         }
-        else
-        {
-            attackTimer = attackSpeed;
-        }
 
         coord.x = transform.position.x + 0.5f;
+    }
+
+    public bool IsAttackCooledDown()
+    {
+        return attackTimer >= attackSpeed;
     }
 
     public virtual bool CanAttack()
@@ -126,7 +130,7 @@ public class Creature : MonoBehaviour
 
     public float GetDamageFlatReduction()
     {
-        return GetDefendPoint();
+        return defendPoint;
     }
 
     protected virtual void OnDeath()
@@ -138,5 +142,36 @@ public class Creature : MonoBehaviour
     public float GetDefendPoint()
     {
         return defendPoint;
+    }
+
+    public int GetID()
+    {
+        return id;
+    }
+
+    public float GetHP()
+    {
+        return healthPoint;
+    }
+    
+
+    public float GetMaxHP()
+    {
+        return maxHP;
+    }
+
+    public Sprite GetAvatar()
+    {
+        return avatar;
+    }
+
+    public float GetAttackSpeed()
+    {
+        return attackSpeed;
+    }
+
+    public float GetAttackPoint()
+    {
+        return attackPoint;
     }
 }

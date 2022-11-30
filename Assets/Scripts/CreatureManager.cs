@@ -72,33 +72,85 @@ public class CreatureManager : MonoBehaviour
         //Debug.Log("Add creature type " + creature.GetType());
     }
 
-    public Creature GetOppositeCreatureInRowInRange(Creature attacker)
-    {
-        return GetOppositeCreatureInRowInRange(attacker.team, (int)attacker.coord.y, attacker.coord.x, attacker.GetRangeDir());
-    }
-
-    public Creature GetOppositeCreatureInRowInRange(int team, int row, float coordX, float rangeDir)
+    public Creature GetOppositeCreatureInRowWithHitBox(int team, int row, float coordX, float hitBoxWidth)
     {
         foreach (Creature creature in creatures)
         {
+            if (!creature.gameObject.activeSelf) continue;
             if (creature.team == team) continue;
-            if (creature.healthPoint <= 0) continue;
+            if (creature.GetHP() <= 0) continue;
 
-            bool isInRange = false;
-            if (rangeDir < 0)
-            {
-                isInRange = coordX + rangeDir <= creature.coord.x;
-            }
-            else
-            {
-                isInRange = coordX + rangeDir >= creature.coord.x;
-            }
+            //TODO: creature width + shot direction
+            float creatureWidth = 0.75f;
+            bool isInRange = coordX - hitBoxWidth / 2 <= creature.coord.x + creatureWidth && coordX + hitBoxWidth / 2 >= creature.coord.x - creatureWidth;
+
             if (creature.coord.y == row && isInRange)
             {
                 return creature;
             }
         }
         return null;
+    }
+
+    public Creature GetOppositeCreatureInRowInRange(Creature attacker)
+    {
+        return GetOppositeCreatureInRowInRange(attacker.team, (int)attacker.coord.y, attacker.coord.x, attacker.GetRangeDir());
+    }
+
+    public List<Creature> GetOppositeCreaturesInRowInRange(Creature attacker)
+    {
+        return GetOppositeCreaturesInRowInRange(attacker.team, (int)attacker.coord.y, attacker.coord.x, attacker.GetRangeDir());
+    }
+
+    public Creature GetOppositeCreatureInRowInRange(int team, int row, float coordX, float rangeDir)
+    {
+        foreach (Creature creature in creatures)
+        {
+            if (!creature.gameObject.activeSelf) continue;
+            if (creature.team == team) continue;
+            if (creature.GetHP() <= 0) continue;
+
+            if (IsInRangeAndSameRow(creature, coordX, rangeDir, row))
+            {
+                return creature;
+            }
+        }
+        return null;
+    }
+
+    public List<Creature> GetOppositeCreaturesInRowInRange(int team, int row, float coordX, float rangeDir)
+    {
+        List<Creature> ans = new List<Creature>();
+        foreach (Creature creature in creatures)
+        {
+            if (!creature.gameObject.activeSelf) continue;
+            if (creature.team == team) continue;
+            if (creature.GetHP() <= 0) continue;
+
+            if (IsInRangeAndSameRow(creature, coordX, rangeDir, row))
+            {
+                ans.Add(creature);
+            }
+        }
+        return ans;
+    }
+
+    private bool IsInRangeAndSameRow(Creature creature, float coordX, float rangeDir, int row)
+    {
+        bool isInRange = false;
+        if (rangeDir < 0)
+        {
+            isInRange = coordX + rangeDir <= creature.coord.x && coordX > creature.coord.x;
+        }
+        else
+        {
+            isInRange = coordX + rangeDir >= creature.coord.x && coordX < creature.coord.x;
+        }
+        if (creature.coord.y == row && isInRange)
+        {
+            return true;
+        }
+        return false;
     }
 
     internal static Plant AddPlantToTile(int plantIndex, Tile tile)
@@ -116,5 +168,10 @@ public class CreatureManager : MonoBehaviour
     public Plant GetPlantByIndex(int index)
     {
         return Instantiate(plantPrefabs[index]);
+    }
+
+    public int GetCost(int index)
+    {
+        return plantPrefabs[index].cost;
     }
 }

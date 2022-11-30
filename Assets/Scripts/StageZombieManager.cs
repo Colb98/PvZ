@@ -90,7 +90,7 @@ public class StageZombieManager : MonoBehaviour
         List<Zombie> zombies = zombieByRows.GetValueOrDefault((int) zombie.coord.y);
         if (zombies == null)
         {
-            Debug.LogError("Can't get zombie " + zombie.id + " at row: " + zombie.coord.y);
+            Debug.LogError("Can't get zombie " + zombie.GetID() + " at row: " + zombie.coord.y);
             return;
         }
         for (int i = 0; i < zombies.Count; i++)

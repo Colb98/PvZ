@@ -50,9 +50,21 @@ public class AttacksManager : MonoBehaviour
         // Melee or *instant* attack
         if (prefab == null)
         {
-            Creature target = CreatureManager.GetInstance().GetOppositeCreatureInRowInRange(attacker);
-            target.ReceiveDamage(attacker.attackPoint, attacker);
-            Debug.Log("Melee damage " + attacker.attackPoint + " attack target" + target + " hp: " + target.healthPoint);
+            if (attacker.isAOE)
+            {
+                List<Creature> targets = CreatureManager.GetInstance().GetOppositeCreaturesInRowInRange(attacker);
+                foreach (Creature target in targets)
+                {
+                    target.ReceiveDamage(attacker.GetAttackPoint(), attacker);
+                }
+            }
+            else
+            {
+                Creature target = CreatureManager.GetInstance().GetOppositeCreatureInRowInRange(attacker);
+                if (target != null)
+                    target.ReceiveDamage(attacker.GetAttackPoint(), attacker);
+            }
+            //Debug.Log("Melee damage " + attacker.attackPoint + " attack target" + target + " hp: " + target.healthPoint);
             return null;
         }
 
@@ -69,13 +81,14 @@ public class AttacksManager : MonoBehaviour
             //Debug.Log("Get attack of type " + type + " hit");
             ret = attackOfType[0];
             attackOfType.RemoveAt(0);
-            ret.OnCreate();
         }
         else
         {
             //Debug.Log("Get attack of type " + type + " miss");
             ret = Instantiate(prefab);
         }
+        ret.creator = attacker;
+        ret.OnCreate();
         ret.gameObject.SetActive(true);
         return ret;
     }

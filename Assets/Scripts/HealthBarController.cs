@@ -21,6 +21,6 @@ public class HealthBarController : MonoBehaviour
     void Update()
     {
         Creature current = GetComponent<Creature>();
-        healthBar.normalizedValue = current.healthPoint / current.maxHP;
+        healthBar.normalizedValue = current.GetHP() / current.GetMaxHP();
     }
 }

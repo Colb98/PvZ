@@ -25,12 +25,12 @@ public class CreatureStatusEffect : MonoBehaviour
 
     public virtual float GetMaxHP()
     {
-        return host.maxHP;
+        return host.GetMaxHP();
     }
 
     public virtual float GetHP()
     {
-        return host.maxHP;
+        return host.GetHP();
     }
 
     public virtual float GetSpeed()
@@ -44,17 +44,17 @@ public class CreatureStatusEffect : MonoBehaviour
 
     public virtual float GetAttackSpeed()
     {
-        return host.attackSpeed;
+        return host.GetAttackSpeed();
     }
 
     public virtual float GetAttackPoint()
     {
-        return host.attackPoint;
+        return host.GetAttackPoint();
     }
 
     public virtual float GetDefendPoint()
     {
-        return host.defendPoint;
+        return host.GetDefendPoint();
     }
 
     public virtual float GetSpeedMultiplier()
